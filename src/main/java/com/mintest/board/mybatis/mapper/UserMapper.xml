@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="User">
+	<resultMap type="UserVo" id="UserMap">
+		<id column="user_id" property="user_id"/>
+		<result column="name" property="name"/>
+		<result column="id" property="id"/>
+		<result column="password" property="password"/>
+	</resultMap>
+	
+	<!-- sql select -->
+	<sql id="sql_select">
+		select user_id, name, id, password from user
+	</sql>
+	
+	<!-- 관리자 페이지에서 회원 목록을 불러오는 selectAll -->
+	<select id="selectAll" resultMap="UserMap">
+		<include refid="sql_select"/> order by user_id desc
+	</select>
+	
+	<!-- 관리자 페이지에서 회원 목록의 상세정보를 보기 위해 사용되는 select -->
+	<select id="select" parameterType="int" resultMap="UserMap">
+		<include refid="sql_select"/> where user_id = #{user_id}
+	</select>
+	
+	<!-- 회원 가입 insert문-->
+	<insert id="insert" parameterType="UserVo">
+		insert into user(name, id, password)
+		values(#{name},#{id},#{password})
+	</insert>
+	
+	<!-- 상세정보에서 회원정보 삭제를 위한 delete -->
+	<delete id="delete" parameterType="int">
+		delete from user where user_id = #{user_id}
+	</delete>
+	
+	<!-- 상세정보에서 회원정보 수정을 위한 update -->
+	<update id="update" parameterType="UserVo">
+		update user set name = #{name}, id = #{id}, password = #{password}
+		where user_id = #{user_id}
+	</update>
+	
+	<!-- Login select 문 -->
+	<select id="login" parameterType="UserVo" resultMap="UserMap">
+		<include refid="sql_select"/> where id = #{id} and password = #{password}
+	</select>
+
+
+</mapper>

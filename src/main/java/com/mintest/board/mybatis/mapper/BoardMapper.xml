@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Board">
+	<resultMap type="BoardVo" id="BoardMap">
+		<id column="board_id" property="board_id"/>
+		<result column="title" property="title"/>
+		<result column="content" property="content"/>
+		<result column="secret" property="secret"/>
+		<result column="board_pwd" property="board_pwd"/>
+		<result column="status" property="status"/>
+		<result column="regdate" property="regdate"/>
+		<result column="moddate" property="moddate"/>
+		<association column="user_id" property="user" javaType="UserVo" select="User.select"></association>
+	</resultMap>
+	
+	<!-- sql select -->
+	<sql id="sql_select">
+		select board_id, user_id, title, content, secret, board_pwd, status, regdate, moddate from board
+	</sql>
+	
+	<!-- 게시물 selectAll -->
+	<select id="selectAll" resultMap="BoardMap">
+		<include refid="sql_select"/> where status = 'C' || status = 'U' order by board_id desc
+	</select>
+	
+	<!-- 게시물 select -->
+	<select id="select" parameterType="int" resultMap="BoardMap">
+		<include refid="sql_select"/> where board_id = #{board_id}
+	</select>
+	
+	<!-- 게시물 insert문-->
+	<insert id="insert" parameterType="BoardVo">
+		insert into board(user_id, title, content)
+		values(#{user.user_id},#{title},#{content})
+	</insert>
+	
+	<!-- 비밀게시물 insert문-->
+	<insert id="insert_secret" parameterType="BoardVo">
+		insert into board(user_id, title, content, secret, board_pwd)
+		values(#{user.user_id},#{title},#{content},'T',#{board_pwd})
+	</insert>
+	
+	<!-- 삭제를 위한 delete --> <!-- 실제 삭제는 안하고 상태를 'D'로 변경 -->
+	<update id="delete" parameterType="int">
+		update board set status = 'D' where board_id = #{board_id}
+	</update>
+	
+	<!-- 비밀글 및 수정 -->
+	<update id="update_dosecret" parameterType="BoardVo">
+		update board set title = #{title}, content = #{content}, secret = 'T', board_pwd = #{board_pwd}, status = 'U'
+		where board_id = #{board_id}
+	</update>
+	
+	<!-- 비밀글 해제 및 수정 -->
+	<update id="update_unsecret" parameterType="BoardVo">
+		update board set title = #{title}, content = #{content}, secret = 'F', board_pwd = null, status = 'U'
+		where board_id = #{board_id}
+	</update>
+
+
+</mapper>
