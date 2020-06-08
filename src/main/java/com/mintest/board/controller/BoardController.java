@@ -2,13 +2,14 @@ package com.mintest.board.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mintest.board.service.BoardService;
@@ -24,13 +25,20 @@ public class BoardController {
 
 	/* 메인 게시판 페이지로 이동 */
 	@RequestMapping(value = "/boards", method = RequestMethod.GET)
-	public ModelAndView selectAll() {
+	public ModelAndView selectAll(HttpSession session) {
 		logger.info("BoardList 이동");
 		
-		List<BoardVo> boardList = boardService.selectAll();
-		ModelAndView mav = new ModelAndView("board/board");
-		mav.addObject("boardList", boardList);
+		UserVo user = (UserVo)session.getAttribute("user"); 
+		ModelAndView mav = null;
+		if(user!=null) {
 		
+			List<BoardVo> boardList = boardService.selectAll(user.getUser_id());
+			mav = new ModelAndView("board/board");
+			mav.addObject("boardList", boardList);
+		
+		}else {
+			mav = new ModelAndView("redirect:reLogin");
+		}
 		return mav;
 	}
 	

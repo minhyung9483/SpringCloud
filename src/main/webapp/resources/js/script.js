@@ -103,4 +103,19 @@ function updateBoard(){
 	}
 }
 
+/* 클라우드 등록 */
+function insertCloud(){
+	var result = confirm("등록하시겠습니까?");
+	var cloud_files = $("#cloud_files").val();
+	if(result){
+		if(cloud_files == '' || cloud_files == null) {
+	      alert("파일을 선택해 주세요!!!!");
+	      $("#cloud_files").focus();
+	      return;
+		} 
+		document.getElementById("fileUpload").submit();
+	}
+	
+}
+
 

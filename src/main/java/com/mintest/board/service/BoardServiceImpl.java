@@ -14,9 +14,9 @@ public class BoardServiceImpl implements BoardService{
 	private BoardDAO boardDAO;
 
 	@Override
-	public List<BoardVo> selectAll() {
+	public List<BoardVo> selectAll(int user_id) {
 		// TODO Auto-generated method stub
-		return boardDAO.selectAll();
+		return boardDAO.selectAll(user_id);
 	}
 
 	@Override

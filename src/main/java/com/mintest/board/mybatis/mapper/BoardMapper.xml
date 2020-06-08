@@ -21,8 +21,8 @@
 	</sql>
 	
 	<!-- 게시물 selectAll -->
-	<select id="selectAll" resultMap="BoardMap">
-		<include refid="sql_select"/> where status = 'C' || status = 'U' order by board_id desc
+	<select id="selectAll" parameterType="int" resultMap="BoardMap">
+		<include refid="sql_select"/> where (status = 'C' || status = 'U') AND user_id = #{user.user_id} order by board_id desc
 	</select>
 	
 	<!-- 게시물 select -->

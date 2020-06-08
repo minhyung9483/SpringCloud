@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Cloud">
+	<resultMap type="CloudVo" id="CloudMap">
+		<id column="cloud_id" property="cloud_id"/>
+		<result column="file_path" property="file_path"/>
+		<result column="ori_file_name" property="ori_file_name"/>
+		<result column="save_file_name" property="save_file_name"/>
+		<result column="file_ext" property="file_ext"/>
+		<result column="file_size" property="file_size"/>
+		<result column="status" property="status"/>
+		<result column="regdate" property="regdate"/>
+		<result column="moddate" property="moddate"/>
+		<association column="user_id" property="user" javaType="UserVo" select="User.select"></association>
+	</resultMap>
+	
+	<!-- sql select -->
+	<sql id="sql_select">
+		select cloud_id, user_id, file_path, ori_file_name, save_file_name, file_ext, file_size, status, regdate, moddate from cloud
+	</sql>
+	
+	<!-- 클라우드 selectAll -->
+	<select id="selectAll" parameterType="int" resultMap="CloudMap">
+		<include refid="sql_select"/> where (status = 'C' || status = 'U') AND user_id = #{user.user_id}  order by cloud_id desc
+	</select>
+	
+	<!-- 클라우드 select -->
+	<select id="select" parameterType="int" resultMap="CloudMap">
+		<include refid="sql_select"/> where cloud_id = #{cloud_id}
+	</select>
+	
+	<!-- 클라우드 insert문-->
+	<insert id="insert" parameterType="CloudVo">
+		insert into cloud(user_id, file_path, ori_file_name, save_file_name, file_ext, file_size )
+		values(#{user.user_id},#{file_path},#{ori_file_name},#{save_file_name},#{file_ext},#{file_size})
+	</insert>
+	
+	<!-- 클라우드 삭제를 위한 delete --> <!-- 실제 삭제는 안하고 상태를 'D'로 변경 -->
+	<update id="delete" parameterType="int">
+		update cloud set status = 'D' where cloud_id = #{cloud_id}
+	</update>
+
+
+</mapper>

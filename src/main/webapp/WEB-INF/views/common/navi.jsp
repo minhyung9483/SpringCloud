@@ -19,11 +19,16 @@ if (session.getAttribute("user") == null || session.getAttribute("user").equals(
 </nav>
 
 <!-- Top menu on small screens -->
+<!-- 
 <header class="w3-container w3-top w3-hide-large w3-white w3-xlarge w3-padding-16">
-  <span class="w3-left w3-padding">SOME NAME</span>
+  <span class="w3-left w3-padding"><%=user.getName() %></span>
   <a href="javascript:void(0)" class="w3-right w3-button w3-white" onclick="">☰</a>
+  <a href="/" onclick="" class="w3-bar-item w3-button">HOME</a>
+  <a href="/clouds" onclick="" class="w3-bar-item w3-button">CLOUD</a> 
+  <a href="/boards" onclick="" class="w3-bar-item w3-button">BOARD</a> 
+  <a href="/doLogout" onclick="" class="w3-bar-item w3-button">LOGOUT</a>
 </header>
-
+ --> 
 <!-- Overlay effect when opening sidebar on small screens -->
 <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 <%}%>

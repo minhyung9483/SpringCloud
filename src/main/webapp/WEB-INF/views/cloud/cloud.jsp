@@ -1,10 +1,16 @@
+<%@page import="com.mintest.board.vo.CloudVo"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    <%List<CloudVo> cloudList = (List)request.getAttribute("cloudList"); %>
 <!DOCTYPE html>
 <html lang="en">
 <title>클라우드</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript" src="/resources/js/script.js"></script>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="/resources/css/main.css">
@@ -13,30 +19,32 @@
 <%@ include file="/WEB-INF/views/common/navi.jsp" %>
 
 <!-- !PAGE CONTENT! -->
-<div class="w3-main" style="margin-left:300px">
+<div  style="margin-left:300px;background-color:#fff;">
+	<form action="/clouds" id="fileUpload" method="post" enctype="multipart/form-data">
+	    <input type="hidden" name="user_id" value="${user.user_id}"><br>
+	    <input class="w3-button w3-white w3-padding-large" id="cloud_files" type="file" name="files" multiple>
+	    <input class="w3-button w3-white w3-padding-large" type="button" value="등록" onClick="insertCloud()">
+	</form>
+</div>
+<div class="w3-main" style="margin-left:300px;">
 
   <!-- Push down content on small screens --> 
   <div class="w3-hide-large" style="margin-top:83px"></div>
   
   <!-- Photo grid -->
   <div class="w3-row">
-    <div class="w3-third">
-      <img src="/resources/img/sample.jpg" style="width:100%" onclick="onClick(this)" alt="A boy surrounded by beautiful nature">
-      <img src="/resources/img/sample.jpg" style="width:100%" onclick="onClick(this)" alt="What a beautiful scenery this sunset">
-      <img src="/resources/img/sample.jpg" style="width:100%" onclick="onClick(this)" alt="The Beach. Me. Alone. Beautiful">
-    </div>
-
-    <div class="w3-third">
-      <img src="/resources/img/sample.jpg" style="width:100%" onclick="onClick(this)" alt="Quiet day at the beach. Cold, but beautiful">
-      <img src="/resources/img/sample.jpg" style="width:100%" onclick="onClick(this)" alt="Waiting for the bus in the desert">
-      <img src="/resources/img/sample.jpg" style="width:100%" onclick="onClick(this)" alt="Nature again.. At its finest!">
-    </div>
-    
-    <div class="w3-third">
-      <img src="/resources/img/sample.jpg" style="width:100%" onclick="onClick(this)" alt="Canoeing again">
-      <img src="/resources/img/sample.jpg" style="width:100%" onclick="onClick(this)" alt="A girl, and a train passing">
-      <img src="/resources/img/sample.jpg" style="width:100%" onclick="onClick(this)" alt="What a beautiful day!">
-    </div>
+  <%for(int i=0; i<cloudList.size();i++){ %>
+  	<%String path = "/resources/cloud/"+cloudList.get(i).getUser().getUser_id()+"/"+cloudList.get(i).getSave_file_name()+cloudList.get(i).getFile_ext(); %>
+  	<%if(i%3==0){ %>
+  		<div class="w3-third">
+  	<%} %>
+  	
+  		<img src="<%=path %>" style="width:100%" onclick="onClick(this)" alt="<%=cloudList.get(i).getOri_file_name()%>">
+  		
+  	<%if((i%3==2)||i==(cloudList.size()-1)){ %>
+  		</div>
+  	<%} %>
+  <%} %>
   </div>
 
   <!-- Pagination -->

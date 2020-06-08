@@ -14,9 +14,9 @@ public class MybatisBoardDAO implements BoardDAO{
 	private SqlSessionTemplate sessionTemplate;
 	
 	@Override
-	public List<BoardVo> selectAll() {
+	public List<BoardVo> selectAll(int user_id) {
 		// TODO Auto-generated method stub
-		return sessionTemplate.selectList("Board.selectAll");
+		return sessionTemplate.selectList("Board.selectAll", user_id);
 	}
 
 	@Override

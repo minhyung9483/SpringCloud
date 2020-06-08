@@ -6,9 +6,11 @@
   <typeAliases>
   	<typeAlias type="com.mintest.board.vo.UserVo" alias="UserVo"/>
   	<typeAlias type="com.mintest.board.vo.BoardVo" alias="BoardVo"/>
+  	<typeAlias type="com.mintest.board.vo.CloudVo" alias="CloudVo"/>
   </typeAliases>
   <mappers>
     <mapper resource="com/mintest/board/mybatis/mapper/UserMapper.xml"/>
     <mapper resource="com/mintest/board/mybatis/mapper/BoardMapper.xml"/>
+    <mapper resource="com/mintest/board/mybatis/mapper/CloudMapper.xml"/>
   </mappers>
 </configuration>
